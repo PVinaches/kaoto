@@ -73,6 +73,7 @@ exports[`Navigation Component navigation sidebar for: Integration 1`] = `
                   <a
                     aria-current="page"
                     class="pf-v6-c-nav__link pf-m-current"
+                    data-discover="true"
                     data-testid="Design"
                     href="/"
                   >
@@ -87,6 +88,7 @@ exports[`Navigation Component navigation sidebar for: Integration 1`] = `
                 >
                   <a
                     class="pf-v6-c-nav__link"
+                    data-discover="true"
                     data-testid="Source Code"
                     href="/code"
                   >
@@ -147,6 +149,7 @@ exports[`Navigation Component navigation sidebar for: Integration 1`] = `
                 >
                   <a
                     class="pf-v6-c-nav__link"
+                    data-discover="true"
                     data-testid="Import"
                     href="/rest/import"
                   >
@@ -161,6 +164,7 @@ exports[`Navigation Component navigation sidebar for: Integration 1`] = `
                 >
                   <a
                     class="pf-v6-c-nav__link"
+                    data-discover="true"
                     data-testid="Editor"
                     href="/rest"
                   >
@@ -178,6 +182,7 @@ exports[`Navigation Component navigation sidebar for: Integration 1`] = `
           >
             <a
               class="pf-v6-c-nav__link"
+              data-discover="true"
               data-testid="Beans"
               href="/beans"
             >
@@ -192,6 +197,7 @@ exports[`Navigation Component navigation sidebar for: Integration 1`] = `
           >
             <a
               class="pf-v6-c-nav__link"
+              data-discover="true"
               data-testid="Metadata"
               href="/metadata"
             >
@@ -206,6 +212,7 @@ exports[`Navigation Component navigation sidebar for: Integration 1`] = `
           >
             <a
               class="pf-v6-c-nav__link"
+              data-discover="true"
               data-testid="Pipe ErrorHandler"
               href="/pipe-error-handler"
             >
@@ -220,6 +227,7 @@ exports[`Navigation Component navigation sidebar for: Integration 1`] = `
           >
             <a
               class="pf-v6-c-nav__link"
+              data-discover="true"
               data-testid="DataMapper"
               href="/datamapper"
             >
@@ -234,6 +242,7 @@ exports[`Navigation Component navigation sidebar for: Integration 1`] = `
           >
             <a
               class="pf-v6-c-nav__link"
+              data-discover="true"
               data-testid="Catalog"
               href="/catalog"
             >
@@ -320,6 +329,7 @@ exports[`Navigation Component navigation sidebar for: Kamelet 1`] = `
                   <a
                     aria-current="page"
                     class="pf-v6-c-nav__link pf-m-current"
+                    data-discover="true"
                     data-testid="Design"
                     href="/"
                   >
@@ -334,6 +344,7 @@ exports[`Navigation Component navigation sidebar for: Kamelet 1`] = `
                 >
                   <a
                     class="pf-v6-c-nav__link"
+                    data-discover="true"
                     data-testid="Source Code"
                     href="/code"
                   >
@@ -395,6 +406,7 @@ exports[`Navigation Component navigation sidebar for: Kamelet 1`] = `
                 >
                   <a
                     class="pf-v6-c-nav__link"
+                    data-discover="true"
                     data-testid="Import"
                     href="/rest/import"
                   >
@@ -409,6 +421,7 @@ exports[`Navigation Component navigation sidebar for: Kamelet 1`] = `
                 >
                   <a
                     class="pf-v6-c-nav__link"
+                    data-discover="true"
                     data-testid="Editor"
                     href="/rest"
                   >
@@ -426,6 +439,7 @@ exports[`Navigation Component navigation sidebar for: Kamelet 1`] = `
           >
             <a
               class="pf-v6-c-nav__link"
+              data-discover="true"
               data-testid="Beans"
               href="/beans"
             >
@@ -440,6 +454,7 @@ exports[`Navigation Component navigation sidebar for: Kamelet 1`] = `
           >
             <a
               class="pf-v6-c-nav__link"
+              data-discover="true"
               data-testid="Metadata"
               href="/metadata"
             >
@@ -454,6 +469,7 @@ exports[`Navigation Component navigation sidebar for: Kamelet 1`] = `
           >
             <a
               class="pf-v6-c-nav__link"
+              data-discover="true"
               data-testid="Pipe ErrorHandler"
               href="/pipe-error-handler"
             >
@@ -468,6 +484,7 @@ exports[`Navigation Component navigation sidebar for: Kamelet 1`] = `
           >
             <a
               class="pf-v6-c-nav__link"
+              data-discover="true"
               data-testid="DataMapper"
               href="/datamapper"
             >
@@ -482,6 +499,7 @@ exports[`Navigation Component navigation sidebar for: Kamelet 1`] = `
           >
             <a
               class="pf-v6-c-nav__link"
+              data-discover="true"
               data-testid="Catalog"
               href="/catalog"
             >
@@ -568,6 +586,7 @@ exports[`Navigation Component navigation sidebar for: KameletBinding 1`] = `
                   <a
                     aria-current="page"
                     class="pf-v6-c-nav__link pf-m-current"
+                    data-discover="true"
                     data-testid="Design"
                     href="/"
                   >
@@ -582,6 +601,7 @@ exports[`Navigation Component navigation sidebar for: KameletBinding 1`] = `
                 >
                   <a
                     class="pf-v6-c-nav__link"
+                    data-discover="true"
                     data-testid="Source Code"
                     href="/code"
                   >
@@ -643,6 +663,7 @@ exports[`Navigation Component navigation sidebar for: KameletBinding 1`] = `
                 >
                   <a
                     class="pf-v6-c-nav__link"
+                    data-discover="true"
                     data-testid="Import"
                     href="/rest/import"
                   >
@@ -657,6 +678,7 @@ exports[`Navigation Component navigation sidebar for: KameletBinding 1`] = `
                 >
                   <a
                     class="pf-v6-c-nav__link"
+                    data-discover="true"
                     data-testid="Editor"
                     href="/rest"
                   >
@@ -674,6 +696,7 @@ exports[`Navigation Component navigation sidebar for: KameletBinding 1`] = `
           >
             <a
               class="pf-v6-c-nav__link"
+              data-discover="true"
               data-testid="Beans"
               href="/beans"
             >
@@ -688,6 +711,7 @@ exports[`Navigation Component navigation sidebar for: KameletBinding 1`] = `
           >
             <a
               class="pf-v6-c-nav__link"
+              data-discover="true"
               data-testid="Metadata"
               href="/metadata"
             >
@@ -702,6 +726,7 @@ exports[`Navigation Component navigation sidebar for: KameletBinding 1`] = `
           >
             <a
               class="pf-v6-c-nav__link"
+              data-discover="true"
               data-testid="Pipe ErrorHandler"
               href="/pipe-error-handler"
             >
@@ -716,6 +741,7 @@ exports[`Navigation Component navigation sidebar for: KameletBinding 1`] = `
           >
             <a
               class="pf-v6-c-nav__link"
+              data-discover="true"
               data-testid="DataMapper"
               href="/datamapper"
             >
@@ -730,6 +756,7 @@ exports[`Navigation Component navigation sidebar for: KameletBinding 1`] = `
           >
             <a
               class="pf-v6-c-nav__link"
+              data-discover="true"
               data-testid="Catalog"
               href="/catalog"
             >
@@ -816,6 +843,7 @@ exports[`Navigation Component navigation sidebar for: Pipe 1`] = `
                   <a
                     aria-current="page"
                     class="pf-v6-c-nav__link pf-m-current"
+                    data-discover="true"
                     data-testid="Design"
                     href="/"
                   >
@@ -830,6 +858,7 @@ exports[`Navigation Component navigation sidebar for: Pipe 1`] = `
                 >
                   <a
                     class="pf-v6-c-nav__link"
+                    data-discover="true"
                     data-testid="Source Code"
                     href="/code"
                   >
@@ -891,6 +920,7 @@ exports[`Navigation Component navigation sidebar for: Pipe 1`] = `
                 >
                   <a
                     class="pf-v6-c-nav__link"
+                    data-discover="true"
                     data-testid="Import"
                     href="/rest/import"
                   >
@@ -905,6 +935,7 @@ exports[`Navigation Component navigation sidebar for: Pipe 1`] = `
                 >
                   <a
                     class="pf-v6-c-nav__link"
+                    data-discover="true"
                     data-testid="Editor"
                     href="/rest"
                   >
@@ -922,6 +953,7 @@ exports[`Navigation Component navigation sidebar for: Pipe 1`] = `
           >
             <a
               class="pf-v6-c-nav__link"
+              data-discover="true"
               data-testid="Beans"
               href="/beans"
             >
@@ -936,6 +968,7 @@ exports[`Navigation Component navigation sidebar for: Pipe 1`] = `
           >
             <a
               class="pf-v6-c-nav__link"
+              data-discover="true"
               data-testid="Metadata"
               href="/metadata"
             >
@@ -950,6 +983,7 @@ exports[`Navigation Component navigation sidebar for: Pipe 1`] = `
           >
             <a
               class="pf-v6-c-nav__link"
+              data-discover="true"
               data-testid="Pipe ErrorHandler"
               href="/pipe-error-handler"
             >
@@ -964,6 +998,7 @@ exports[`Navigation Component navigation sidebar for: Pipe 1`] = `
           >
             <a
               class="pf-v6-c-nav__link"
+              data-discover="true"
               data-testid="DataMapper"
               href="/datamapper"
             >
@@ -978,6 +1013,7 @@ exports[`Navigation Component navigation sidebar for: Pipe 1`] = `
           >
             <a
               class="pf-v6-c-nav__link"
+              data-discover="true"
               data-testid="Catalog"
               href="/catalog"
             >
@@ -1064,6 +1100,7 @@ exports[`Navigation Component navigation sidebar for: Route 1`] = `
                   <a
                     aria-current="page"
                     class="pf-v6-c-nav__link pf-m-current"
+                    data-discover="true"
                     data-testid="Design"
                     href="/"
                   >
@@ -1078,6 +1115,7 @@ exports[`Navigation Component navigation sidebar for: Route 1`] = `
                 >
                   <a
                     class="pf-v6-c-nav__link"
+                    data-discover="true"
                     data-testid="Source Code"
                     href="/code"
                   >
@@ -1138,6 +1176,7 @@ exports[`Navigation Component navigation sidebar for: Route 1`] = `
                 >
                   <a
                     class="pf-v6-c-nav__link"
+                    data-discover="true"
                     data-testid="Import"
                     href="/rest/import"
                   >
@@ -1152,6 +1191,7 @@ exports[`Navigation Component navigation sidebar for: Route 1`] = `
                 >
                   <a
                     class="pf-v6-c-nav__link"
+                    data-discover="true"
                     data-testid="Editor"
                     href="/rest"
                   >
@@ -1169,6 +1209,7 @@ exports[`Navigation Component navigation sidebar for: Route 1`] = `
           >
             <a
               class="pf-v6-c-nav__link"
+              data-discover="true"
               data-testid="Beans"
               href="/beans"
             >
@@ -1183,6 +1224,7 @@ exports[`Navigation Component navigation sidebar for: Route 1`] = `
           >
             <a
               class="pf-v6-c-nav__link"
+              data-discover="true"
               data-testid="Metadata"
               href="/metadata"
             >
@@ -1197,6 +1239,7 @@ exports[`Navigation Component navigation sidebar for: Route 1`] = `
           >
             <a
               class="pf-v6-c-nav__link"
+              data-discover="true"
               data-testid="Pipe ErrorHandler"
               href="/pipe-error-handler"
             >
@@ -1211,6 +1254,7 @@ exports[`Navigation Component navigation sidebar for: Route 1`] = `
           >
             <a
               class="pf-v6-c-nav__link"
+              data-discover="true"
               data-testid="DataMapper"
               href="/datamapper"
             >
@@ -1225,6 +1269,7 @@ exports[`Navigation Component navigation sidebar for: Route 1`] = `
           >
             <a
               class="pf-v6-c-nav__link"
+              data-discover="true"
               data-testid="Catalog"
               href="/catalog"
             >
