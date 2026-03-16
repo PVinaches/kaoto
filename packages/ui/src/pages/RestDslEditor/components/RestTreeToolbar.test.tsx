@@ -4,6 +4,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { CamelResourceFactory } from '../../../models/camel/camel-resource-factory';
 import { BaseVisualCamelEntity } from '../../../models/visualization/base-visual-entity';
 import { CamelRestConfigurationVisualEntity } from '../../../models/visualization/flows/camel-rest-configuration-visual-entity';
+import { clickToolbarActionUtil } from '../test-utils';
 import { RestTreeToolbar } from './RestTreeToolbar';
 
 // Wrapper component to provide required context
@@ -43,7 +44,6 @@ describe('RestTreeToolbar', () => {
         />,
       );
 
-      // Open the menu
       const menuButton = screen.getByRole('button', { name: 'Actions' });
       fireEvent.click(menuButton);
 
@@ -69,7 +69,6 @@ describe('RestTreeToolbar', () => {
         />,
       );
 
-      // Open the menu
       const menuButton = screen.getByRole('button', { name: 'Actions' });
       fireEvent.click(menuButton);
 
@@ -77,7 +76,7 @@ describe('RestTreeToolbar', () => {
       expect(addRestConfigButton).not.toHaveAttribute('aria-disabled', 'true');
     });
 
-    it('should fire callback when clicked', () => {
+    it('should fire callback when clicked', async () => {
       const entities: BaseVisualCamelEntity[] = [];
 
       render(
@@ -90,12 +89,7 @@ describe('RestTreeToolbar', () => {
         />,
       );
 
-      // Open the menu
-      const menuButton = screen.getByRole('button', { name: 'Actions' });
-      fireEvent.click(menuButton);
-
-      const addRestConfigButton = screen.getByText('Add Configuration').closest('li');
-      fireEvent.click(addRestConfigButton as HTMLElement);
+      await clickToolbarActionUtil('Add Configuration');
       expect(mockOnAddRestConfiguration).toHaveBeenCalledTimes(1);
     });
   });
@@ -114,7 +108,6 @@ describe('RestTreeToolbar', () => {
         />,
       );
 
-      // Open the menu
       const menuButton = screen.getByRole('button', { name: 'Actions' });
       fireEvent.click(menuButton);
 
@@ -142,7 +135,6 @@ describe('RestTreeToolbar', () => {
         />,
       );
 
-      // Open the menu
       const menuButton = screen.getByRole('button', { name: 'Actions' });
       fireEvent.click(menuButton);
 
@@ -150,7 +142,7 @@ describe('RestTreeToolbar', () => {
       expect(addRestButton).not.toHaveAttribute('aria-disabled', 'true');
     });
 
-    it('should fire callback when clicked', () => {
+    it('should fire callback when clicked', async () => {
       const entities: BaseVisualCamelEntity[] = [];
 
       render(
@@ -163,12 +155,7 @@ describe('RestTreeToolbar', () => {
         />,
       );
 
-      // Open the menu
-      const menuButton = screen.getByRole('button', { name: 'Actions' });
-      fireEvent.click(menuButton);
-
-      const addRestButton = screen.getByText('Add Service').closest('li');
-      fireEvent.click(addRestButton as HTMLElement);
+      await clickToolbarActionUtil('Add Service');
       expect(mockOnAddRest).toHaveBeenCalledTimes(1);
     });
   });
@@ -187,7 +174,6 @@ describe('RestTreeToolbar', () => {
         />,
       );
 
-      // Open the menu
       const menuButton = screen.getByRole('button', { name: 'Actions' });
       fireEvent.click(menuButton);
 
@@ -216,7 +202,6 @@ describe('RestTreeToolbar', () => {
         />,
       );
 
-      // Open the menu
       const menuButton = screen.getByRole('button', { name: 'Actions' });
       fireEvent.click(menuButton);
 
@@ -248,7 +233,6 @@ describe('RestTreeToolbar', () => {
         />,
       );
 
-      // Open the menu
       const menuButton = screen.getByRole('button', { name: 'Actions' });
       fireEvent.click(menuButton);
 
@@ -280,7 +264,6 @@ describe('RestTreeToolbar', () => {
         />,
       );
 
-      // Open the menu
       const menuButton = screen.getByRole('button', { name: 'Actions' });
       fireEvent.click(menuButton);
 
@@ -316,7 +299,6 @@ describe('RestTreeToolbar', () => {
         />,
       );
 
-      // Open the menu
       const menuButton = screen.getByRole('button', { name: 'Actions' });
       fireEvent.click(menuButton);
 
@@ -339,7 +321,6 @@ describe('RestTreeToolbar', () => {
         />,
       );
 
-      // Open the menu
       const menuButton = screen.getByRole('button', { name: 'Actions' });
       fireEvent.click(menuButton);
 
@@ -366,7 +347,6 @@ describe('RestTreeToolbar', () => {
         />,
       );
 
-      // Open the menu
       const menuButton = screen.getByRole('button', { name: 'Actions' });
       fireEvent.click(menuButton);
 
@@ -374,7 +354,7 @@ describe('RestTreeToolbar', () => {
       expect(deleteButton).not.toHaveAttribute('aria-disabled', 'true');
     });
 
-    it('should fire callback when clicked', () => {
+    it('should fire callback when clicked', async () => {
       const camelResource = CamelResourceFactory.createCamelResource(`
 - rest:
     id: rest-1234
@@ -393,18 +373,13 @@ describe('RestTreeToolbar', () => {
         />,
       );
 
-      // Open the menu
-      const menuButton = screen.getByRole('button', { name: 'Actions' });
-      fireEvent.click(menuButton);
-
-      const deleteButton = screen.getByText('Delete').closest('li');
-      fireEvent.click(deleteButton as HTMLElement);
+      await clickToolbarActionUtil('Delete');
       expect(mockOnDelete).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('AddMethodModal', () => {
-    it('should open when Add Method button is clicked', () => {
+    it('should open when Add Method button is clicked', async () => {
       const camelResource = CamelResourceFactory.createCamelResource(`
 - rest:
     id: rest-1234
@@ -425,18 +400,13 @@ describe('RestTreeToolbar', () => {
         </TestWrapper>,
       );
 
-      // Open the menu
-      const menuButton = screen.getByRole('button', { name: 'Actions' });
-      fireEvent.click(menuButton);
+      await clickToolbarActionUtil('Add Operation');
 
-      const addMethodButton = screen.getByText('Add Operation').closest('li');
-      fireEvent.click(addMethodButton as HTMLElement);
-
-      expect(screen.getByTestId('add-method-modal')).toBeInTheDocument();
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
       expect(screen.getByText('Add REST Method')).toBeInTheDocument();
     });
 
-    it('should close when cancel button is clicked', () => {
+    it('should close when cancel button is clicked', async () => {
       const camelResource = CamelResourceFactory.createCamelResource(`
 - rest:
     id: rest-1234
@@ -457,24 +427,17 @@ describe('RestTreeToolbar', () => {
         </TestWrapper>,
       );
 
-      // Open the menu
-      const menuButton = screen.getByRole('button', { name: 'Actions' });
-      fireEvent.click(menuButton);
+      await clickToolbarActionUtil('Add Operation');
 
-      // Open modal
-      const addMethodButton = screen.getByText('Add Operation').closest('li');
-      fireEvent.click(addMethodButton as HTMLElement);
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
 
-      expect(screen.getByTestId('add-method-modal')).toBeInTheDocument();
-
-      // Close modal
-      const cancelButton = screen.getByTestId('add-method-modal-cancel-btn');
+      const cancelButton = screen.getByRole('button', { name: 'Cancel' });
       fireEvent.click(cancelButton);
 
-      expect(screen.queryByTestId('add-method-modal')).not.toBeInTheDocument();
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     });
 
-    it('should receive onAddMethod callback prop', () => {
+    it('should receive onAddMethod callback prop', async () => {
       const camelResource = CamelResourceFactory.createCamelResource(`
 - rest:
     id: rest-1234
@@ -495,16 +458,9 @@ describe('RestTreeToolbar', () => {
         </TestWrapper>,
       );
 
-      // Open the menu
-      const menuButton = screen.getByRole('button', { name: 'Actions' });
-      fireEvent.click(menuButton);
+      await clickToolbarActionUtil('Add Operation');
 
-      // Open modal
-      const addMethodButton = screen.getByText('Add Operation').closest('li');
-      fireEvent.click(addMethodButton as HTMLElement);
-
-      // Verify modal is rendered with the form
-      expect(screen.getByTestId('add-method-modal')).toBeInTheDocument();
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
       expect(screen.getByText('Add REST Method')).toBeInTheDocument();
     });
   });

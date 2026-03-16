@@ -26,7 +26,7 @@ export const AddMethodModal: FunctionComponent<AddMethodModalProps> = ({ onClose
   }, [formModel, onAddMethod, onClose]);
 
   return (
-    <ComposedModal open size="sm" data-testid="add-method-modal" onClose={onClose}>
+    <ComposedModal open size="sm" onClose={onClose}>
       <ModalHeader title="Add REST Method" />
 
       <ModalBody>
@@ -44,10 +44,10 @@ export const AddMethodModal: FunctionComponent<AddMethodModalProps> = ({ onClose
       </ModalBody>
 
       <ModalFooter>
-        <Button kind="secondary" onClick={onClose} data-testid="add-method-modal-cancel-btn">
+        <Button kind="secondary" onClick={onClose}>
           Cancel
         </Button>
-        <Button kind="primary" onClick={handleAdd} data-testid="add-method-modal-add-btn">
+        <Button kind="primary" onClick={handleAdd}>
           Add
         </Button>
       </ModalFooter>

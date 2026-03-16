@@ -28,8 +28,8 @@ describe('AddMethodModal', () => {
       formPageObject,
       getMethodField: () => screen.getByPlaceholderText('get'),
       getPathField: () => formPageObject.getFieldByDisplayName('Path') as HTMLInputElement,
-      getCancelButton: () => screen.getByTestId('add-method-modal-cancel-btn'),
-      getAddButton: () => screen.getByTestId('add-method-modal-add-btn'),
+      getCancelButton: () => screen.getByRole('button', { name: 'Cancel' }),
+      getAddButton: () => screen.getByRole('button', { name: 'Add' }),
     };
   };
 
@@ -41,9 +41,9 @@ describe('AddMethodModal', () => {
     renderWithProviders(<AddMethodModal onClose={mockOnClose} onAddMethod={mockOnAddMethod} />);
 
     expect(screen.getByText('Add REST Method')).toBeInTheDocument();
-    expect(screen.getByTestId('add-method-modal')).toBeInTheDocument();
-    expect(screen.getByTestId('add-method-modal-cancel-btn')).toBeInTheDocument();
-    expect(screen.getByTestId('add-method-modal-add-btn')).toBeInTheDocument();
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Add' })).toBeInTheDocument();
   });
 
   it('should initialize form with default method "get"', async () => {
@@ -67,10 +67,8 @@ describe('AddMethodModal', () => {
   it('should call onAddMethod with correct form data when Add button is clicked with valid data', async () => {
     const { formPageObject, getAddButton } = await setupModal({ expandFields: true });
 
-    // Fill in the path - method defaults to 'get'
     await formPageObject.inputText('Path', '/api/users');
 
-    // Click Add button
     fireEvent.click(getAddButton());
 
     await waitFor(() => {

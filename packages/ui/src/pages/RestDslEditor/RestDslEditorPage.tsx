@@ -4,6 +4,7 @@ import { CodeSnippet } from '@carbon/react';
 import { CanvasFormTabsProvider, getCamelRandomId, KaotoForm } from '@kaoto/forms';
 import { FunctionComponent, useCallback, useState } from 'react';
 
+import { Loading } from '../../components/Loading';
 import { ResizableSplitPanels } from '../../components/ResizableSplitPanels/ResizableSplitPanels';
 import { customFieldsFactoryfactory } from '../../components/Visualization/Canvas/Form/fields/custom-fields-factory';
 import { SuggestionRegistrar } from '../../components/Visualization/Canvas/Form/suggestions/SuggestionsProvider';
@@ -130,17 +131,21 @@ export const RestDslEditorPage: FunctionComponent = () => {
                   </>
                 )}
               </div>
-              <CanvasFormTabsProvider tab="All">
-                <SuggestionRegistrar>
-                  <KaotoForm
-                    key={`${selectedElement.entityId}__${selectedElement.modelPath}`}
-                    schema={schema}
-                    onChangeProp={handleOnChangeIndividualProp}
-                    model={model}
-                    customFieldsFactory={customFieldsFactoryfactory}
-                  />
-                </SuggestionRegistrar>
-              </CanvasFormTabsProvider>
+              {!schema || Object.keys(schema).length === 0 ? (
+                <Loading>Loading schemas...</Loading>
+              ) : (
+                <CanvasFormTabsProvider tab="All">
+                  <SuggestionRegistrar>
+                    <KaotoForm
+                      key={`${selectedElement.entityId}__${selectedElement.modelPath}`}
+                      schema={schema}
+                      onChangeProp={handleOnChangeIndividualProp}
+                      model={model}
+                      customFieldsFactory={customFieldsFactoryfactory}
+                    />
+                  </SuggestionRegistrar>
+                </CanvasFormTabsProvider>
+              )}
             </>
           )}
         </div>
