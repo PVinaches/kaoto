@@ -17,6 +17,11 @@ import { RestTreeToolbar, RestTreeToolbarProps } from './components/RestTreeTool
 const DEFAULT_TREE_PANEL_WIDTH_PERCENT = 30;
 const DEFAULT_REST_METHOD_URI = 'direct';
 
+/**
+ * Main page component for editing REST DSL configurations.
+ * Provides a split-panel interface with a tree view on the left and a form editor on the right.
+ * Supports adding/editing REST configurations, REST services, and REST methods.
+ */
 export const RestDslEditorPage: FunctionComponent = () => {
   const { visualEntities, camelResource, updateEntitiesFromCamelResource } = useEntityContext();
   const [selectedElement, setSelectedElement] = useState<IRestTreeSelection | undefined>();
@@ -27,6 +32,7 @@ export const RestDslEditorPage: FunctionComponent = () => {
 
   const [treeVersion, setTreeVersion] = useState(0);
 
+  /** Handles changes to individual properties in the form editor */
   const handleOnChangeIndividualProp = useCallback(
     (path: string, value: unknown) => {
       if (!selectedElement || !selectedEntity) return;
@@ -43,6 +49,7 @@ export const RestDslEditorPage: FunctionComponent = () => {
     [selectedElement, selectedEntity, updateEntitiesFromCamelResource],
   );
 
+  /** Adds a new REST configuration entity to the resource */
   const handleAddRestConfiguration = useCallback(() => {
     const newId = camelResource.addNewEntity(EntityType.RestConfiguration);
     updateEntitiesFromCamelResource();
@@ -50,6 +57,7 @@ export const RestDslEditorPage: FunctionComponent = () => {
     setTreeVersion((version) => version + 1);
   }, [camelResource, updateEntitiesFromCamelResource]);
 
+  /** Adds a new REST service entity to the resource */
   const handleAddRest = useCallback(() => {
     const newId = camelResource.addNewEntity(EntityType.Rest);
     setSelectedElement({ modelPath: 'rest', entityId: newId });
@@ -57,6 +65,7 @@ export const RestDslEditorPage: FunctionComponent = () => {
     setTreeVersion((version) => version + 1);
   }, [camelResource, updateEntitiesFromCamelResource]);
 
+  /** Adds a new REST method to the selected REST service */
   const handleAddMethod: RestTreeToolbarProps['onAddMethod'] = useCallback(
     (model) => {
       if (!selectedEntity || !(selectedEntity instanceof CamelRestVisualEntity)) return;
@@ -84,6 +93,7 @@ export const RestDslEditorPage: FunctionComponent = () => {
     [selectedEntity, updateEntitiesFromCamelResource],
   );
 
+  /** Deletes the selected REST entity or method */
   const handleDelete = useCallback(() => {
     if (!selectedEntity || !selectedElement) return;
 

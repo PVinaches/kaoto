@@ -6,17 +6,25 @@ import { customFieldsFactoryfactory } from '../../../components/Visualization/Ca
 import { SuggestionRegistrar } from '../../../components/Visualization/Canvas/Form/suggestions/SuggestionsProvider';
 import { ADD_METHOD_SCHEMA, AddMethodFormModel } from './add-method-schema';
 
+/**
+ * Props for the AddMethodModal component.
+ */
 interface AddMethodModalProps {
   onClose: () => void;
   onAddMethod: (model: AddMethodFormModel) => void;
 }
 
+/**
+ * Modal dialog for adding a new REST method to a REST service.
+ * Displays a form with fields for HTTP method type, path, and optional ID.
+ */
 export const AddMethodModal: FunctionComponent<AddMethodModalProps> = ({ onClose, onAddMethod }) => {
   const [formModel, setFormModel] = useState<Partial<AddMethodFormModel>>({
     method: 'get',
   });
   const formRef = useRef<KaotoFormApi>(null);
 
+  /** Validates the form and adds the method if valid */
   const handleAdd = useCallback(async () => {
     const valid = formRef.current?.validate();
     if (isDefined(formModel) && !isDefined(valid)) {

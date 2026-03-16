@@ -7,16 +7,26 @@ import { BaseVisualCamelEntity } from '../../../models/visualization/base-visual
 import { restToTree } from '../rest-to-tree';
 import { MethodBadge } from './MethodBadge';
 
+/** Represents a selected item in the REST tree */
 export type IRestTreeSelection = { entityId: string; modelPath: string };
+
+/**
+ * Props for the RestTree component.
+ */
 export interface IRestTree extends PropsWithChildren {
   entities: BaseVisualCamelEntity[];
   selected?: IRestTreeSelection;
   onSelect: (selection: IRestTreeSelection) => void;
 }
 
+/**
+ * Tree view component for displaying REST DSL configurations and services.
+ * Shows REST configurations and REST services with their methods in a hierarchical structure.
+ */
 export const RestTree: FunctionComponent<IRestTree> = ({ entities, selected, onSelect, children }) => {
   const restTreeNodes = restToTree(entities);
 
+  /** Generates a unique node ID from entity ID and model path */
   const getNodeId = (entityId: string, modelPath: string) => `${entityId}::${modelPath}`;
   const activeNodeId = selected ? getNodeId(selected.entityId, selected.modelPath) : undefined;
 

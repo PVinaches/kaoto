@@ -1,12 +1,20 @@
 import { KaotoSchemaDefinition } from '../../../models/kaoto-schema';
 import { RestMethods } from '../../../models/special-processors.constants';
 
+/**
+ * Form model for adding a new REST method to a REST service.
+ * Contains the HTTP method type, path, and optional identifier.
+ */
 export interface AddMethodFormModel {
   method: RestMethods;
   path: string;
   id?: string;
 }
 
+/**
+ * JSON Schema definition for the Add REST Method form.
+ * Defines the structure and validation rules for adding new REST methods.
+ */
 export const ADD_METHOD_SCHEMA: KaotoSchemaDefinition['schema'] = {
   type: 'object',
   title: 'Add REST Method',

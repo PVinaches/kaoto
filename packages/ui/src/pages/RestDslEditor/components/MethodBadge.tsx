@@ -4,9 +4,14 @@ import { OperationalTag } from '@carbon/react';
 import { FunctionComponent } from 'react';
 
 type MethodBadgeProps = {
+  /** The HTTP method type (get, post, put, delete, patch, head) */
   type: string;
 };
 
+/**
+ * Displays a colored badge for HTTP method types.
+ * Each method type is assigned a specific color for visual distinction.
+ */
 export const MethodBadge: FunctionComponent<MethodBadgeProps> = ({ type }) => {
   let badgeType = 'gray';
 

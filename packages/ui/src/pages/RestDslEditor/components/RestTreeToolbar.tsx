@@ -10,6 +10,9 @@ import { AddMethodFormModel } from './add-method-schema';
 import { AddMethodModal } from './AddMethodModal';
 import { IRestTreeSelection } from './RestTree';
 
+/**
+ * Props for the RestTreeToolbar component.
+ */
 export interface RestTreeToolbarProps {
   entities: BaseVisualCamelEntity[];
   selectedElement?: IRestTreeSelection;
@@ -19,6 +22,10 @@ export interface RestTreeToolbarProps {
   onDelete: () => void;
 }
 
+/**
+ * Toolbar component for the REST tree view.
+ * Provides actions to add REST configurations, services, methods, and delete selected items.
+ */
 export const RestTreeToolbar: FunctionComponent<RestTreeToolbarProps> = ({
   entities,
   selectedElement,
@@ -33,11 +40,13 @@ export const RestTreeToolbar: FunctionComponent<RestTreeToolbarProps> = ({
     toggleOff: closeAddMethodModal,
   } = useToggle(false);
 
+  /** Checks if a REST configuration already exists */
   const hasRestConfiguration = useMemo(
     () => entities.some((entity) => entity instanceof CamelRestConfigurationVisualEntity),
     [entities],
   );
 
+  /** Gets the selected REST entity if a REST service or method is selected */
   const selectedRestEntity = useMemo(() => {
     if (!selectedElement) return undefined;
 
