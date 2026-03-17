@@ -3,7 +3,6 @@ import { CanvasFormTabsProvider, isDefined, KaotoForm, KaotoFormApi } from '@kao
 import { FunctionComponent, useCallback, useRef, useState } from 'react';
 
 import { customFieldsFactoryfactory } from '../../../components/Visualization/Canvas/Form/fields/custom-fields-factory';
-import { SuggestionRegistrar } from '../../../components/Visualization/Canvas/Form/suggestions/SuggestionsProvider';
 import { ADD_METHOD_SCHEMA, AddMethodFormModel } from './add-method-schema';
 
 /**
@@ -39,15 +38,13 @@ export const AddMethodModal: FunctionComponent<AddMethodModalProps> = ({ onClose
 
       <ModalBody>
         <CanvasFormTabsProvider tab="All">
-          <SuggestionRegistrar>
-            <KaotoForm
-              schema={ADD_METHOD_SCHEMA}
-              model={formModel}
-              onChange={setFormModel as (model: unknown) => void}
-              ref={formRef}
-              customFieldsFactory={customFieldsFactoryfactory}
-            />
-          </SuggestionRegistrar>
+          <KaotoForm
+            schema={ADD_METHOD_SCHEMA}
+            model={formModel}
+            onChange={setFormModel as (model: unknown) => void}
+            ref={formRef}
+            customFieldsFactory={customFieldsFactoryfactory}
+          />
         </CanvasFormTabsProvider>
       </ModalBody>
 

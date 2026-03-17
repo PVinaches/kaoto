@@ -12,32 +12,6 @@ import { RestDslEditorPage } from './RestDslEditorPage';
 import { clickToolbarActionUtil } from './test-utils';
 
 /**
- * Helper function to render RestDslEditorPage with a camel resource
- */
-const renderPage = (yamlContent: string) => {
-  const camelResource = CamelResourceFactory.createCamelResource(yamlContent);
-  const { Provider, updateEntitiesFromCamelResourceSpy } = TestProvidersWrapper({ camelResource });
-
-  render(
-    <Provider>
-      <RestDslEditorPage />
-    </Provider>,
-  );
-
-  return { camelResource, updateEntitiesFromCamelResourceSpy };
-};
-
-/**
- * Helper function to select a tree node
- */
-const selectTreeNode = async (nodeName: string) => {
-  const node = await screen.findByText(nodeName);
-  act(() => {
-    fireEvent.click(node);
-  });
-};
-
-/**
  * Helper function to add a REST method via modal
  */
 const addRestMethod = async (path: string) => {
@@ -59,6 +33,38 @@ const addRestMethod = async (path: string) => {
 };
 
 describe('RestDslEditorPage', () => {
+  let unmount: () => void;
+
+  /**
+   * Helper function to render RestDslEditorPage with a camel resource
+   */
+  const renderPage = (yamlContent: string) => {
+    const camelResource = CamelResourceFactory.createCamelResource(yamlContent);
+    const { Provider, updateEntitiesFromCamelResourceSpy, updateSourceCodeFromEntitiesSpy } = TestProvidersWrapper({
+      camelResource,
+    });
+
+    const result = render(
+      <Provider>
+        <RestDslEditorPage />
+      </Provider>,
+    );
+
+    unmount = result.unmount;
+
+    return { camelResource, updateEntitiesFromCamelResourceSpy, updateSourceCodeFromEntitiesSpy };
+  };
+
+  /**
+   * Helper function to select a tree node
+   */
+  const selectTreeNode = async (nodeName: string) => {
+    const node = await screen.findByText(nodeName);
+    act(() => {
+      fireEvent.click(node);
+    });
+  };
+
   beforeEach(async () => {
     const catalogsMap = await getFirstCatalogMap(catalogLibrary as CatalogLibrary);
     CamelCatalogService.setCatalogKey(CatalogKind.Entity, catalogsMap.entitiesCatalog);
@@ -66,12 +72,13 @@ describe('RestDslEditorPage', () => {
   });
 
   afterEach(() => {
+    unmount?.();
     jest.clearAllMocks();
   });
 
   describe('Entity Updates', () => {
     it('should update entity on property change', async () => {
-      const { camelResource, updateEntitiesFromCamelResourceSpy } = renderPage(`
+      const { camelResource, updateSourceCodeFromEntitiesSpy } = renderPage(`
 - rest:
     id: rest-1
     path: /api
@@ -95,7 +102,7 @@ describe('RestDslEditorPage', () => {
       });
 
       await waitFor(() => {
-        expect(updateEntitiesFromCamelResourceSpy).toHaveBeenCalled();
+        expect(updateSourceCodeFromEntitiesSpy).toHaveBeenCalled();
       });
 
       const restEntity = camelResource.getVisualEntities().find((e) => e.id === 'rest-1');

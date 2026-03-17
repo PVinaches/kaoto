@@ -2,15 +2,15 @@ import './RestDslEditorPage.scss';
 
 import { CodeSnippet } from '@carbon/react';
 import { CanvasFormTabsProvider, getCamelRandomId, KaotoForm } from '@kaoto/forms';
-import { FunctionComponent, useCallback, useState } from 'react';
+import { FunctionComponent, Suspense, useCallback, useState } from 'react';
 
 import { Loading } from '../../components/Loading';
 import { ResizableSplitPanels } from '../../components/ResizableSplitPanels/ResizableSplitPanels';
-import { customFieldsFactoryfactory } from '../../components/Visualization/Canvas/Form/fields/custom-fields-factory';
 import { SuggestionRegistrar } from '../../components/Visualization/Canvas/Form/suggestions/SuggestionsProvider';
 import { useEntityContext } from '../../hooks/useEntityContext/useEntityContext';
 import { EntityType } from '../../models/camel/entities';
 import { CamelRestVisualEntity } from '../../models/visualization/flows/camel-rest-visual-entity';
+import { restFormFieldFactory } from './components/restFormFieldFactory';
 import { IRestTreeSelection, RestTree } from './components/RestTree';
 import { RestTreeToolbar, RestTreeToolbarProps } from './components/RestTreeToolbar';
 
@@ -23,7 +23,8 @@ const DEFAULT_REST_METHOD_URI = 'direct';
  * Supports adding/editing REST configurations, REST services, and REST methods.
  */
 export const RestDslEditorPage: FunctionComponent = () => {
-  const { visualEntities, camelResource, updateEntitiesFromCamelResource } = useEntityContext();
+  const { visualEntities, camelResource, updateEntitiesFromCamelResource, updateSourceCodeFromEntities } =
+    useEntityContext();
   const [selectedElement, setSelectedElement] = useState<IRestTreeSelection | undefined>();
 
   const selectedEntity = visualEntities.find((entity) => entity.id === selectedElement?.entityId);
@@ -44,9 +45,9 @@ export const RestDslEditorPage: FunctionComponent = () => {
 
       const fullPath = `${selectedElement.modelPath}.${path}`;
       selectedEntity.updateModel(fullPath, updatedValue);
-      updateEntitiesFromCamelResource();
+      updateSourceCodeFromEntities();
     },
-    [selectedElement, selectedEntity, updateEntitiesFromCamelResource],
+    [selectedElement, selectedEntity, updateSourceCodeFromEntities],
   );
 
   /** Adds a new REST configuration entity to the resource */
@@ -81,7 +82,7 @@ export const RestDslEditorPage: FunctionComponent = () => {
         to: {
           uri: DEFAULT_REST_METHOD_URI,
           parameters: {
-            name: `${model.path}-${(methodId.match(/\d/g) || []).join('')}`,
+            name: `direct-${methodId}`,
           },
         },
       });
@@ -125,7 +126,7 @@ export const RestDslEditorPage: FunctionComponent = () => {
         </RestTree>
       }
       rightPanel={
-        <div>
+        <div className="rest-right-panel">
           {!selectedElement?.entityId && <div>Select an entity from the list to edit its configuration</div>}
           {selectedElement && (
             <>
@@ -144,17 +145,19 @@ export const RestDslEditorPage: FunctionComponent = () => {
               {!schema || Object.keys(schema).length === 0 ? (
                 <Loading>Loading schemas...</Loading>
               ) : (
-                <CanvasFormTabsProvider tab="All">
-                  <SuggestionRegistrar>
-                    <KaotoForm
-                      key={`${selectedElement.entityId}__${selectedElement.modelPath}`}
-                      schema={schema}
-                      onChangeProp={handleOnChangeIndividualProp}
-                      model={model}
-                      customFieldsFactory={customFieldsFactoryfactory}
-                    />
-                  </SuggestionRegistrar>
-                </CanvasFormTabsProvider>
+                <Suspense fallback={<Loading>Loading form...</Loading>}>
+                  <CanvasFormTabsProvider tab="All">
+                    <SuggestionRegistrar>
+                      <KaotoForm
+                        key={`${selectedElement.entityId}__${selectedElement.modelPath}`}
+                        schema={schema}
+                        onChangeProp={handleOnChangeIndividualProp}
+                        model={model}
+                        customFieldsFactory={restFormFieldFactory}
+                      />
+                    </SuggestionRegistrar>
+                  </CanvasFormTabsProvider>
+                </Suspense>
               )}
             </>
           )}
