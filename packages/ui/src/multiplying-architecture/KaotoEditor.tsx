@@ -1,3 +1,4 @@
+import '../styles/carbon-overrides.scss';
 import './KaotoEditor.scss';
 
 import { Http } from '@carbon/icons-react';
