@@ -116,3 +116,12 @@ body {
   background-color: $background;
   block-size: calc(100% - #{$spacing-09});
 }
+
+/*
+  The IBM font doesn't behave the same as RH one with regards of weights
+  we need to override it and increase the weight to keep a similar look and feel
+*/
+/* stylelint-disable-next-line selector-class-pattern */
+.pf-v6-c-form__label-text {
+  --pf-v6-c-form__label-text--FontWeight: var(--pf-t--global--font--weight--400);
+}
