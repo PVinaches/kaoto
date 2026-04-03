@@ -276,55 +276,6 @@ export class CamelComponentSchemaService {
     return '';
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  static getMultiValueSerializedDefinition(path: string, definition: any): ParsedParameters | undefined {
-    const camelElementLookup = this.getCamelComponentLookup(path, definition);
-    if (camelElementLookup.componentName === undefined) {
-      return definition;
-    }
-
-    const catalogLookup = CamelCatalogService.getCatalogLookup(camelElementLookup.componentName);
-    if (catalogLookup.catalogKind === CatalogKind.Component) {
-      const multiValueParameters: Map<string, string> = new Map<string, string>();
-      if (catalogLookup.definition?.properties !== undefined) {
-        Object.entries(catalogLookup.definition.properties).forEach(([key, value]) => {
-          if (value.multiValue) multiValueParameters.set(key, value.prefix!);
-        });
-      }
-      const defaultMultiValues: ParsedParameters = {};
-      const filteredParameters = definition.parameters;
-
-      if (definition.parameters !== undefined) {
-        Object.keys(definition.parameters).forEach((key) => {
-          if (multiValueParameters.has(key)) {
-            if (definition.parameters[key] === undefined) {
-              return;
-            }
-            Object.keys(definition.parameters[key]).forEach((subKey) => {
-              defaultMultiValues[multiValueParameters.get(key) + subKey] = definition.parameters[key][subKey];
-            });
-            delete filteredParameters[key];
-          }
-        });
-      }
-      return { ...definition, parameters: { ...filteredParameters, ...defaultMultiValues } };
-    }
-    return definition;
-  }
-
-  /**
-   * Flatten multivalue parameters for display in PropertiesField
-   */
-  static flattenMultivalueParameters(
-    componentName: string,
-    parameters: Record<string, unknown> | undefined,
-  ): Record<string, unknown> {
-    if (!parameters) return {};
-    const fakeDefinition = { uri: componentName, parameters: cloneDeep(parameters) };
-    const serialized = this.getMultiValueSerializedDefinition('from', fakeDefinition);
-    return (serialized?.parameters ?? parameters) as Record<string, unknown>;
-  }
-
   /**
    * Extract the component name from the endpoint uri
    * An URI is composed by a component name and query parameters, separated by a colon
@@ -428,7 +379,6 @@ export class CamelComponentSchemaService {
     if (camelElementLookup.componentName !== undefined) {
       updatedDefinition.parameters = updatedDefinition.parameters ?? {};
       this.applyParametersFromSyntax(camelElementLookup.componentName, updatedDefinition);
-      this.readMultiValue(camelElementLookup.componentName, updatedDefinition);
     }
 
     return updatedDefinition;
@@ -505,49 +455,6 @@ export class CamelComponentSchemaService {
       default:
         return { processorName };
     }
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private static readMultiValue(componentName: string, definition: any) {
-    const catalogLookup = CamelCatalogService.getCatalogLookup(componentName);
-
-    const multiValueParameters: Map<string, string> = new Map<string, string>();
-    if (catalogLookup?.definition?.properties !== undefined) {
-      Object.entries(catalogLookup.definition.properties).forEach(([key, value]) => {
-        if (value.multiValue) multiValueParameters.set(key, value.prefix!);
-      });
-    }
-    if (multiValueParameters.size > 0) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const parameters: any = {};
-      const filteredParameters = definition.parameters;
-
-      multiValueParameters.forEach((value, key) => {
-        const nestParameters: ParsedParameters = {};
-
-        Object.entries(definition.parameters).forEach(([paramKey, paramValue]) => {
-          if (paramKey.startsWith(value)) {
-            nestParameters[paramKey.replace(value, '')] = paramValue as string;
-            delete filteredParameters[paramKey];
-          }
-          parameters[key] = { ...nestParameters };
-        });
-      });
-      Object.assign(definition, { parameters: { ...filteredParameters, ...parameters } });
-    }
-  }
-
-  /**
-   * Nest flat multivalue parameters for model storage
-   */
-  static nestMultivalueParameters(
-    componentName: string,
-    flatParameters: Record<string, unknown> | undefined,
-  ): Record<string, unknown> {
-    if (!flatParameters) return {};
-    const fakeDefinition = { parameters: cloneDeep(flatParameters) };
-    this.readMultiValue(componentName, fakeDefinition);
-    return fakeDefinition.parameters as Record<string, unknown>;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
