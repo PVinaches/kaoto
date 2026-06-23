@@ -8,6 +8,9 @@ import { CatalogSchemaLoader } from '../../../utils';
 import { ConfirmIntegrationTypeChangeModal } from './ConfirmIntegrationTypeChangeModal';
 
 describe('ConfirmIntegrationTypeChangeModal', () => {
+  let mockSetSelectedCatalog = jest.fn();
+  let onClose = jest.fn();
+
   const mockCamelCatalog: CatalogLibraryEntry = {
     name: 'Camel Main',
     runtime: 'Main',
@@ -30,8 +33,6 @@ describe('ConfirmIntegrationTypeChangeModal', () => {
     proposedFlowType: SourceSchemaType | undefined,
     selectedCatalog: CatalogLibraryEntry = mockCamelCatalog,
   ) => {
-    const mockSetSelectedCatalog = jest.fn();
-    const onClosed = jest.fn();
     const { Provider } = TestProvidersWrapper();
 
     const result = render(
@@ -44,13 +45,18 @@ describe('ConfirmIntegrationTypeChangeModal', () => {
         }}
       >
         <Provider>
-          <ConfirmIntegrationTypeChangeModal proposedFlowType={proposedFlowType} onClosed={onClosed} />
+          <ConfirmIntegrationTypeChangeModal proposedFlowType={proposedFlowType} onClose={onClose} />
         </Provider>
       </RuntimeContext.Provider>,
     );
 
-    return { ...result, onClosed, mockSetSelectedCatalog };
+    return result;
   };
+
+  beforeEach(() => {
+    mockSetSelectedCatalog = jest.fn();
+    onClose = jest.fn();
+  });
 
   it('should be hidden when proposedFlowType is undefined', () => {
     const { queryByTestId } = renderModal(undefined);
@@ -64,20 +70,20 @@ describe('ConfirmIntegrationTypeChangeModal', () => {
     expect(queryByTestId('confirmation-modal')).toBeInTheDocument();
   });
 
-  it('should call onClosed when cancel button is clicked', () => {
-    const { getByTestId, onClosed } = renderModal(SourceSchemaType.Route);
+  it('should call onClose when cancel button is clicked', () => {
+    const { getByTestId } = renderModal(SourceSchemaType.Route);
 
     fireEvent.click(getByTestId('confirmation-modal-cancel'));
 
-    expect(onClosed).toBeCalled();
+    expect(onClose).toHaveBeenCalled();
   });
 
-  it('should call onClosed when close button is clicked', () => {
-    const { getByLabelText, onClosed } = renderModal(SourceSchemaType.Route);
+  it('should call onClose when close button is clicked', () => {
+    const { getByLabelText } = renderModal(SourceSchemaType.Route);
 
     fireEvent.click(getByLabelText('Close'));
 
-    expect(onClosed).toBeCalled();
+    expect(onClose).toHaveBeenCalled();
   });
 
   it('should not show the catalog warning for a same-catalog flow type', () => {
@@ -96,18 +102,18 @@ describe('ConfirmIntegrationTypeChangeModal', () => {
     );
   });
 
-  it('should call onClosed after confirming', async () => {
-    const { getByTestId, onClosed } = renderModal(SourceSchemaType.Route);
+  it('should call onClose after confirming', async () => {
+    const { getByTestId } = renderModal(SourceSchemaType.Route);
 
     await act(async () => {
       fireEvent.click(getByTestId('confirmation-modal-confirm'));
     });
 
-    expect(onClosed).toBeCalled();
+    expect(onClose).toHaveBeenCalled();
   });
 
   it('should update catalog when switching to a different catalog type', async () => {
-    const { getByTestId, mockSetSelectedCatalog } = renderModal(SourceSchemaType.Test, mockCamelCatalog);
+    const { getByTestId } = renderModal(SourceSchemaType.Test, mockCamelCatalog);
 
     await act(async () => {
       fireEvent.click(getByTestId('confirmation-modal-confirm'));
@@ -117,7 +123,7 @@ describe('ConfirmIntegrationTypeChangeModal', () => {
   });
 
   it('should not update catalog when switching between same-catalog flow types', async () => {
-    const { getByTestId, mockSetSelectedCatalog } = renderModal(SourceSchemaType.Pipe, mockCamelCatalog);
+    const { getByTestId } = renderModal(SourceSchemaType.Pipe, mockCamelCatalog);
 
     await act(async () => {
       fireEvent.click(getByTestId('confirmation-modal-confirm'));

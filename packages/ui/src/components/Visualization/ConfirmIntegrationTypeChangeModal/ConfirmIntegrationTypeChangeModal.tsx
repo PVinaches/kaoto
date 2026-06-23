@@ -10,29 +10,27 @@ import { findCatalog, requiresCatalogChange } from '../../../utils/catalog-helpe
 
 interface ConfirmIntegrationTypeChangeModalProps {
   proposedFlowType: SourceSchemaType | undefined;
-  onClosed?: () => void;
+  onClose: () => void;
 }
 
 const DEFAULT_DESCRIPTION =
   'Changing the source type will remove any existing integration and you will lose your current work.';
 
-export const ConfirmIntegrationTypeChangeModal: FunctionComponent<ConfirmIntegrationTypeChangeModalProps> = (props) => {
+export const ConfirmIntegrationTypeChangeModal: FunctionComponent<ConfirmIntegrationTypeChangeModalProps> = ({
+  proposedFlowType,
+  onClose,
+}) => {
   const runtimeContext = useRuntimeContext();
   const setCodeAndNotify = useSourceCodeStore((state) => state.setCodeAndNotify);
   const changesCatalog =
-    props.proposedFlowType !== undefined &&
-    requiresCatalogChange(props.proposedFlowType, runtimeContext.selectedCatalog);
-
-  const onClose = useCallback(() => {
-    props.onClosed?.();
-  }, [props]);
+    proposedFlowType !== undefined && requiresCatalogChange(proposedFlowType, runtimeContext.selectedCatalog);
 
   const onConfirm = useCallback(() => {
-    if (props.proposedFlowType) {
-      setCodeAndNotify(FlowTemplateService.getFlowYamlTemplate(props.proposedFlowType));
+    if (proposedFlowType) {
+      setCodeAndNotify(FlowTemplateService.getFlowYamlTemplate(proposedFlowType));
 
       if (changesCatalog) {
-        const matchingCatalog = findCatalog(props.proposedFlowType, runtimeContext.catalogLibrary);
+        const matchingCatalog = findCatalog(proposedFlowType, runtimeContext.catalogLibrary);
         if (isDefined(matchingCatalog)) {
           runtimeContext.setSelectedCatalog(matchingCatalog);
         }
@@ -40,15 +38,14 @@ export const ConfirmIntegrationTypeChangeModal: FunctionComponent<ConfirmIntegra
 
       onClose();
     }
-  }, [props, runtimeContext, setCodeAndNotify, changesCatalog, onClose]);
+  }, [proposedFlowType, setCodeAndNotify, changesCatalog, onClose, runtimeContext]);
+
+  if (!proposedFlowType) {
+    return null;
+  }
 
   return (
-    <Modal
-      variant={ModalVariant.small}
-      data-testid="confirmation-modal"
-      onClose={onClose}
-      isOpen={props.proposedFlowType !== undefined}
-    >
+    <Modal isOpen variant={ModalVariant.small} data-testid="confirmation-modal" onClose={onClose}>
       <ModalHeader title="Warning" titleIconVariant="warning" />
       <ModalBody>
         <p data-testid="confirmation-modal-text">
