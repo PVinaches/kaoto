@@ -20,7 +20,13 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "prettier": "3.7.4",
-    "typescript": "5.5.4"
+    "typescript": "5.5.4",
+    "vitest": "4.1.8",
+    "vite": "8.0.5",
+    "@vitest/snapshot": "4.1.8",
+    "@vitest/expect": "4.1.8",
+    "@vitest/runner": "4.1.8",
+    "@vitest/utils": "4.1.8"
   },
   "scripts": {
     "prepare": "husky",
@@ -36,6 +42,7 @@
     "@lerna-lite/publish": "^4.11.3",
     "@lerna-lite/version": "^4.11.3",
     "cypress-split": "^1.25.0",
+    "eslint-plugin-simple-import-sort": "^13.0.0",
     "fast-xml-parser": "^5.0.9",
     "husky": "^9.0.0",
     "lint-staged": "^15.0.0"
