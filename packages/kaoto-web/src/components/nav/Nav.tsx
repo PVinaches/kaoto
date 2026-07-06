@@ -39,8 +39,8 @@ export const Nav = () => {
           isActive={isSideNavExpanded}
           aria-expanded={isSideNavExpanded}
         />
-        <HeaderName as={RouterLink} to="/" prefix="Camel">
-          Fleet manager
+        <HeaderName as={RouterLink} to="/" prefix="Kaoto">
+          Designer
         </HeaderName>
         {routesInHeader.length > 0 && (
           <HeaderNavigation>

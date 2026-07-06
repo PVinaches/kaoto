@@ -6,14 +6,9 @@ import { useEffect, useRef } from 'react';
  * @param enabled - Whether the auto-refresh is enabled (default: true)
  */
 export const useRefreshOnFocus = (refreshCallback: () => void, enabled = true) => {
-  const lastFocusTime = useRef<number>(0);
+  const lastFocusTime = useRef<number>(Date.now());
 
   useEffect(() => {
-    // Initialize on first mount
-    if (lastFocusTime.current === 0) {
-      lastFocusTime.current = Date.now();
-    }
-
     if (!enabled) return;
 
     const handleFocus = () => {
@@ -24,9 +19,8 @@ export const useRefreshOnFocus = (refreshCallback: () => void, enabled = true) =
       // This prevents excessive refreshes when quickly switching tabs
       if (timeSinceLastFocus > 5000) {
         refreshCallback();
+        lastFocusTime.current = now;
       }
-
-      lastFocusTime.current = now;
     };
 
     window.addEventListener('focus', handleFocus);

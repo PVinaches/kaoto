@@ -9,6 +9,8 @@ import { Router } from './routes';
 // App level imports
 import { initializeTheme } from './utils/theme';
 
+const basename = import.meta.env.BASE_URL ?? '/';
+
 // Initialize theme on client load
 initializeTheme();
 
@@ -16,7 +18,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ErrorBoundary>
       <AppProvider>
-        <BrowserRouter basename="/admin">
+        <BrowserRouter basename={basename}>
           <Router />
         </BrowserRouter>
       </AppProvider>

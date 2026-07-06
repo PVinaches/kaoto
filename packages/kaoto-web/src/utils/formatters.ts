@@ -14,7 +14,7 @@ export const formatDate = (date: string | number | Date | null | undefined): str
       minute: '2-digit',
     });
   } catch {
-    return 'Invalid date';
+    return 'Invalid Date';
   }
 };
 
