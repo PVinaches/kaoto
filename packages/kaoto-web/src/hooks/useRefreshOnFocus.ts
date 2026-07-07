@@ -6,7 +6,7 @@ import { useEffect, useRef } from 'react';
  * @param enabled - Whether the auto-refresh is enabled (default: true)
  */
 export const useRefreshOnFocus = (refreshCallback: () => void, enabled = true) => {
-  const lastFocusTime = useRef<number>(Date.now());
+  const lastFocusTime = useRef<number>(0);
 
   useEffect(() => {
     if (!enabled) return;

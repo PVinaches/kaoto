@@ -22,7 +22,11 @@ describe('useNotification', () => {
       removeNotification: mockRemoveNotification,
       clearNotifications: mockClearNotifications,
       notifications: [],
-    } as any);
+      isLoading: false,
+      setIsLoading: vi.fn(),
+      error: null,
+      setError: vi.fn(),
+    });
   });
 
   it('should provide notification functions', () => {

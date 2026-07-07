@@ -15,7 +15,7 @@ describe('LoadingState', () => {
   });
 
   it('should apply overlay class when withOverlay is true', () => {
-    const { container } = render(<LoadingState withOverlay={true} />);
+    const { container } = render(<LoadingState withOverlay />);
     const loadingState = container.querySelector('.cs--loading-state--overlay');
     expect(loadingState).toBeInTheDocument();
   });
@@ -39,7 +39,7 @@ describe('LoadingState', () => {
   });
 
   it('should pass small prop to Loading component', () => {
-    const { container } = render(<LoadingState small={true} />);
+    const { container } = render(<LoadingState small />);
     const loading = container.querySelector('.cds--loading--small');
     expect(loading).toBeInTheDocument();
   });
@@ -57,7 +57,7 @@ describe('LoadingState', () => {
   });
 
   it('should render with all props combined', () => {
-    const { container } = render(<LoadingState message="Processing request..." withOverlay={true} small={true} />);
+    const { container } = render(<LoadingState message="Processing request..." withOverlay small />);
 
     expect(screen.getByText('Processing request...')).toBeInTheDocument();
     expect(container.querySelector('.cs--loading-state--overlay')).toBeInTheDocument();

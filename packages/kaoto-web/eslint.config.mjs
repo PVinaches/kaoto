@@ -12,6 +12,9 @@ export default [
   eslintPluginJsxA11y.flatConfigs.recommended,
   pluginReactRefresh.configs.vite,
   {
+    ignores: ['coverage/**', 'dist/**', '*.config.{js,mjs,ts}', 'prettier.config.js'],
+  },
+  {
     settings: {
       'import/resolver': {
         node: {

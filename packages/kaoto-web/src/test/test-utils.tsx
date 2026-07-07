@@ -19,7 +19,7 @@ export function renderWithAllProviders(
   // Push the route we want to test
   window.history.pushState({}, 'Test page', route);
 
-  function Wrapper() {
+  const Wrapper = () => {
     return (
       <StrictMode>
         <BrowserRouter>
@@ -27,7 +27,7 @@ export function renderWithAllProviders(
         </BrowserRouter>
       </StrictMode>
     );
-  }
+  };
 
   return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
 }
@@ -37,9 +37,9 @@ export function renderWithAllProviders(
  * Use this for pure components that don't depend on any context
  */
 export function renderWithoutProviders(ui: ReactElement, renderOptions: RenderOptions = {}) {
-  function Wrapper({ children }: PropsWithChildren) {
+  const Wrapper = ({ children }: PropsWithChildren) => {
     return <StrictMode>{children}</StrictMode>;
-  }
+  };
 
   return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
 }

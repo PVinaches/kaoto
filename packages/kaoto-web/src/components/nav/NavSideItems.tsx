@@ -50,7 +50,7 @@ export const NavSideItems = ({ routesInSideNav, currentPath }: NavSideItemsProps
           <SideNavLink
             key={path ?? carbon.label}
             renderIcon={carbon.icon}
-            {...(destinationProps(path, carbon, currentPath) as any)}
+            {...destinationProps(path, carbon, currentPath)}
           >
             {carbon.label}
           </SideNavLink>
