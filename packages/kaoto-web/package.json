@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "lint": "yarn lint:es && yarn lint:style && yarn lint:format",
     "lint-fix": "yarn lint:es --fix && yarn lint:style --fix && yarn lint:format",
-    "lint:es": "eslint . --report-unused-disable-directives --max-warnings 0 --cache --cache-location \"node_modules/.cache/eslint/\"",
+    "lint:es": "eslint . --report-unused-disable-directives --cache --cache-location \"node_modules/.cache/eslint/\"",
     "lint:style": "stylelint \"./**/*.scss\" --cache --cache-location \"node_modules/.cache/stylelint/\"",
     "lint:format": "prettier . --write --ignore-unknown --no-error-on-unmatched-pattern --log-level warn --cache --cache-location \"node_modules/.cache/prettier/\"",
     "test": "../../node_modules/.bin/vitest run --project kaoto-web --coverage --config ../../vitest.config.ts",

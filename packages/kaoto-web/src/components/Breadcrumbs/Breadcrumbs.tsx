@@ -17,7 +17,7 @@ export const Breadcrumbs = ({ items, current }: BreadcrumbsProps) => {
   const navigate = useNavigate();
 
   const handleClick = (href: string) => {
-    navigate(href);
+    void navigate(href);
   };
 
   return (
