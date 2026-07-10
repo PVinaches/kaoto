@@ -6,8 +6,11 @@ import {
 import { stringify } from 'yaml';
 
 import { TileFilter } from '../../components/Catalog';
+import { DynamicCatalogRegistry } from '../../dynamic-catalog/dynamic-catalog-registry';
+import { CatalogKind } from '../catalog-kind';
 import { BaseEntity, EntityType } from '../entities';
 import { BaseVisualEntityDefinition, KaotoResource } from '../kaoto-resource';
+import { KaotoSchemaDefinition } from '../kaoto-schema';
 import { AddStepMode, BaseVisualEntity, IVisualizationNodeData } from '../visualization/base-visual-entity';
 import { MetadataEntity } from '../visualization/metadata';
 import { IKameletDefinition } from './kamelets-catalog';
@@ -27,6 +30,7 @@ export const CAMEL_K_K8S_API_VERSION_V1 = 'camel.apache.org/v1';
 export abstract class CamelKResource implements KaotoResource {
   protected resource: CamelKType;
   private metadata?: MetadataEntity;
+  private metadataSchema: KaotoSchemaDefinition['schema'] = {};
 
   constructor(parsedResource: unknown) {
     if (parsedResource) {
@@ -48,6 +52,12 @@ export abstract class CamelKResource implements KaotoResource {
     if (this.resource.metadata && !this.metadata) {
       this.metadata = new MetadataEntity(this.resource);
     }
+    const def = await DynamicCatalogRegistry.get().getEntity(CatalogKind.Entity, 'ObjectMeta');
+    this.metadataSchema = (def?.propertiesSchema ?? {}) as KaotoSchemaDefinition['schema'];
+  }
+
+  getMetadataSchema(): KaotoSchemaDefinition['schema'] {
+    return this.metadataSchema;
   }
 
   getCanvasEntityList(): BaseVisualEntityDefinition {

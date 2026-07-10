@@ -155,6 +155,19 @@ describe('CitrusTestResource', () => {
   });
 
   describe('getCanvasEntityList', () => {
+    it('returns empty structure before initialize()', () => {
+      const resource = new CitrusTestResource();
+      const list = resource.getCanvasEntityList();
+      expect(list).toEqual({ common: [], groups: {} });
+    });
+
+    it('returns catalog titles after initialize()', async () => {
+      const resource = new CitrusTestResource(citrusTestJson);
+      await resource.initialize();
+      const list = resource.getCanvasEntityList();
+      expect(list.common.length).toBeGreaterThan(0);
+    });
+
     it('should return all entities', async () => {
       const resource = new CitrusTestResource(citrusTestJson);
       await resource.initialize();

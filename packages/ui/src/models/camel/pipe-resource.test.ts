@@ -1,4 +1,8 @@
+import catalogLibrary from '@kaoto/camel-catalog/index.json';
+import { CatalogLibrary } from '@kaoto/camel-catalog/types';
+
 import { pipeJson } from '../../stubs/pipe';
+import { getFirstCatalogMap, setupDynamicCatalogRegistry } from '../../stubs/test-load-catalog';
 import { PipeResource } from './pipe-resource';
 import { SourceSchemaType } from './source-schema-type';
 
@@ -90,5 +94,26 @@ describe('PipeResource', () => {
     const output = await resource.toSourceCode();
 
     expect(output).toContain('apiVersion: camel.apache.org/v1');
+  });
+});
+
+describe('PipeResource.getErrorHandlerSchema()', () => {
+  beforeAll(async () => {
+    const catalogsMap = await getFirstCatalogMap(catalogLibrary as CatalogLibrary);
+    setupDynamicCatalogRegistry(catalogsMap);
+  });
+
+  it('returns an empty schema before initialize()', () => {
+    const resource = new PipeResource();
+    expect(resource.getErrorHandlerSchema()).toEqual({});
+  });
+
+  it('returns the PipeErrorHandler propertiesSchema after initialize()', async () => {
+    const resource = new PipeResource();
+    await resource.initialize();
+    const schema = resource.getErrorHandlerSchema();
+    // propertiesSchema is an object — verify it is populated (non-empty)
+    expect(typeof schema).toBe('object');
+    expect(schema).not.toEqual({});
   });
 });

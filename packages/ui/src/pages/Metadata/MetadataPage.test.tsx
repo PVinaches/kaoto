@@ -3,10 +3,8 @@ import { CatalogLibrary } from '@kaoto/camel-catalog/types';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 
 import { PipeResource } from '../../models/camel';
-import { CatalogKind } from '../../models/catalog-kind';
-import { CamelCatalogService } from '../../models/visualization/flows/camel-catalog.service';
 import { EntitiesContext } from '../../providers/entities.provider';
-import { getFirstCatalogMap } from '../../stubs/test-load-catalog';
+import { getFirstCatalogMap, setupDynamicCatalogRegistry } from '../../stubs/test-load-catalog';
 import { MetadataPage } from './MetadataPage';
 
 const camelResource = new PipeResource();
@@ -15,14 +13,15 @@ const mockEntitiesContext = {
   entities: camelResource.getEntities(),
   visualEntities: camelResource.getVisualEntities(),
   currentSchemaType: camelResource.getType(),
-  updateSourceCodeFromEntities: vi.fn(),
-  updateEntitiesFromCamelResource: vi.fn(),
+  updateSourceCodeFromEntities: vi.fn() as () => void,
+  updateEntitiesFromCamelResource: vi.fn() as () => void,
 };
 
 describe('MetadataPage', () => {
   beforeAll(async () => {
     const catalogsMap = await getFirstCatalogMap(catalogLibrary as CatalogLibrary);
-    CamelCatalogService.setCatalogKey(CatalogKind.Entity, catalogsMap.entitiesCatalog);
+    setupDynamicCatalogRegistry(catalogsMap);
+    await camelResource.initialize();
   });
 
   it('renders "Not applicable" when the resource type is not supported', () => {

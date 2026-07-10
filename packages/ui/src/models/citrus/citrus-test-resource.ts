@@ -7,14 +7,14 @@ import { EntityOrderingService } from '../camel/entity-ordering.service';
 import { SourceSchemaType } from '../camel/source-schema-type';
 import { CatalogKind } from '../catalog-kind';
 import { BaseEntity, EntityType } from '../entities';
-import { BaseVisualEntityDefinition, KaotoResource } from '../kaoto-resource';
+import { BaseVisualEntityDefinition, BaseVisualEntityDefinitionItem, KaotoResource } from '../kaoto-resource';
 import { KaotoSchemaDefinition } from '../kaoto-schema';
 import {
   AddStepMode,
   BaseVisualCamelEntityConstructor,
   IVisualizationNodeData,
 } from '../visualization/base-visual-entity';
-import { CamelCatalogService, CitrusTestVisualEntity } from '../visualization/flows';
+import { CitrusTestVisualEntity } from '../visualization/flows';
 import { NonVisualEntity } from '../visualization/flows/non-visual-entity';
 import { FlowTemplateService } from '../visualization/flows/support/flow-templates-service';
 import { Test } from './entities/Test';
@@ -63,22 +63,48 @@ export class CitrusTestResource implements KaotoResource {
   async initialize(): Promise<void> {
     if (!this.rawEntities) {
       this.entities = [];
-      return;
+    } else {
+      const entities = Array.isArray(this.rawEntities) ? this.rawEntities : [this.rawEntities];
+      const parsedEntities = entities.reduce((acc, rawItem) => {
+        const entity = this.getEntity(rawItem);
+        if (isDefined(entity) && typeof entity === 'object') {
+          acc.push(entity);
+        }
+        return acc;
+      }, [] as BaseEntity[]);
+
+      this.entities = EntityOrderingService.sortEntitiesForSerialization(parsedEntities);
+
+      // Fetch and cache endpoints schema
+      await this.fetchEndpointsSchema();
     }
 
-    const entities = Array.isArray(this.rawEntities) ? this.rawEntities : [this.rawEntities];
-    const parsedEntities = entities.reduce((acc, rawItem) => {
-      const entity = this.getEntity(rawItem);
-      if (isDefined(entity) && typeof entity === 'object') {
-        acc.push(entity);
-      }
-      return acc;
-    }, [] as BaseEntity[]);
+    // Pre-populate entity list from async catalog (always, even if no raw entities)
+    const entries = await Promise.all(
+      this.supportedEntities.map(async ({ type, group }) => {
+        const def = await DynamicCatalogRegistry.get().getEntity(CatalogKind.TestAction, type);
+        return {
+          type,
+          group,
+          title: (def as unknown as { title?: string })?.title ?? String(type),
+          description: (def as unknown as { description?: string })?.description ?? '',
+        };
+      }),
+    );
 
-    this.entities = EntityOrderingService.sortEntitiesForSerialization(parsedEntities);
-
-    // Fetch and cache endpoints schema
-    await this.fetchEndpointsSchema();
+    this.resolvedEntities = entries.reduce(
+      (acc, { type, group, title, description }) => {
+        const entityDefinition: BaseVisualEntityDefinitionItem = { name: type, title, description };
+        if (group === '') {
+          acc.common.push(entityDefinition);
+        } else {
+          acc.groups[group] ??= [];
+          acc.groups[group].push(entityDefinition);
+        }
+        return acc;
+      },
+      { common: [], groups: {} } as BaseVisualEntityDefinition,
+    );
   }
 
   /**
@@ -90,28 +116,7 @@ export class CitrusTestResource implements KaotoResource {
    * @returns Entity definitions with metadata for display in the visual editor
    */
   getCanvasEntityList(): BaseVisualEntityDefinition {
-    this.resolvedEntities = this.supportedEntities.reduce(
-      (acc, { type, group }) => {
-        const catalogEntity = CamelCatalogService.getComponent(CatalogKind.TestAction, type);
-        const entityDefinition = {
-          name: type,
-          title: catalogEntity?.title || type,
-          description: catalogEntity?.description || '',
-        };
-
-        if (group === '') {
-          acc.common.push(entityDefinition);
-          return acc;
-        }
-
-        acc.groups[group] ??= [];
-        acc.groups[group].push(entityDefinition);
-        return acc;
-      },
-      { common: [], groups: {} } as BaseVisualEntityDefinition,
-    );
-
-    return this.resolvedEntities;
+    return this.resolvedEntities ?? { common: [], groups: {} };
   }
 
   /**

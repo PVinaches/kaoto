@@ -9,9 +9,13 @@ import { EntitiesContext, EntitiesContextResult } from '../../../../providers/en
 import { createMockEntitiesContext } from '../../../../stubs/create-mock-entities-context';
 import { useDisableStep } from './disable-step.hook';
 
-vi.mock('@kaoto/forms', () => ({
-  setValue: vi.fn(),
-}));
+vi.mock('@kaoto/forms', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@kaoto/forms')>();
+  return {
+    ...actual,
+    setValue: vi.fn(),
+  };
+});
 
 describe('useDisableStep', () => {
   const camelResource = new CamelRouteResource();

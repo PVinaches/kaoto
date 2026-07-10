@@ -3,9 +3,7 @@ import { Content } from '@patternfly/react-core';
 import { FunctionComponent, useCallback, useContext, useMemo } from 'react';
 
 import { CamelKResource, CamelKResourceKinds } from '../../models/camel/camel-k-resource';
-import { CatalogKind } from '../../models/catalog-kind';
 import { KaotoSchemaDefinition } from '../../models/kaoto-schema';
-import { CamelCatalogService } from '../../models/visualization/flows/camel-catalog.service';
 import { EntitiesContext } from '../../providers/entities.provider';
 
 export const MetadataPage: FunctionComponent = () => {
@@ -15,7 +13,7 @@ export const MetadataPage: FunctionComponent = () => {
   );
   const entitiesContext = useContext(EntitiesContext);
   const camelkResource = entitiesContext?.camelResource as CamelKResource;
-  const metadataSchema = CamelCatalogService.getComponent(CatalogKind.Entity, 'ObjectMeta')?.propertiesSchema || {};
+  const metadataSchema = camelkResource?.getMetadataSchema() ?? {};
 
   const isSupported = useMemo(() => {
     return camelkResource && camelkResource.getType() in CamelKResourceKinds;

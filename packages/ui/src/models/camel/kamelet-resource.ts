@@ -5,6 +5,7 @@ import { AddStepMode } from '../visualization/base-visual-entity';
 import { CamelComponentFilterService } from '../visualization/flows/support/camel-component-filter.service';
 import { CamelRouteVisualEntityData } from '../visualization/flows/support/camel-component-types';
 import { FlowTemplateService } from '../visualization/flows/support/flow-templates-service';
+import { BeansEntityHandler } from '../visualization/metadata/beans-entity-handler';
 import {
   RouteTemplateBeansEntity,
   RouteTemplateBeansParentType,
@@ -33,6 +34,8 @@ export class KameletResource extends CamelKResource implements RouteTemplateBean
     if (this.flow.kamelet.spec.template.beans) {
       this.beans = new RouteTemplateBeansEntity(this.flow.kamelet.spec.template as RouteTemplateBeansParentType);
     }
+
+    await new BeansEntityHandler(this).prefetchBeanSchema();
   }
 
   refreshVisualMetadata() {

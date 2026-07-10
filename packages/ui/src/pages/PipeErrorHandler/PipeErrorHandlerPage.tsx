@@ -3,9 +3,7 @@ import { Content } from '@patternfly/react-core';
 import { FunctionComponent, useCallback, useContext, useMemo } from 'react';
 
 import { PipeResource, SourceSchemaType } from '../../models/camel';
-import { CatalogKind } from '../../models/catalog-kind';
 import { KaotoSchemaDefinition } from '../../models/kaoto-schema';
-import { CamelCatalogService } from '../../models/visualization/flows/camel-catalog.service';
 import { EntitiesContext } from '../../providers/entities.provider';
 
 export const PipeErrorHandlerPage: FunctionComponent = () => {
@@ -16,8 +14,7 @@ export const PipeErrorHandlerPage: FunctionComponent = () => {
   const entitiesContext = useContext(EntitiesContext);
   const pipeResource = entitiesContext?.camelResource as PipeResource;
 
-  const errorHandlerSchema = (CamelCatalogService.getComponent(CatalogKind.Entity, 'PipeErrorHandler')
-    ?.propertiesSchema || {}) as KaotoSchemaDefinition['schema'];
+  const errorHandlerSchema = pipeResource?.getErrorHandlerSchema() ?? ({} as KaotoSchemaDefinition['schema']);
 
   if (Array.isArray(errorHandlerSchema.oneOf) && !Array.isArray(errorHandlerSchema.anyOf)) {
     errorHandlerSchema.anyOf = [{ oneOf: errorHandlerSchema.oneOf }];

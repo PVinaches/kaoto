@@ -1,8 +1,10 @@
 import { Pipe as PipeType } from '@kaoto/camel-catalog/types';
 
 import { ITile, TileFilter } from '../../components/Catalog/Catalog.models';
+import { DynamicCatalogRegistry } from '../../dynamic-catalog/dynamic-catalog-registry';
 import { CatalogKind } from '../catalog-kind';
 import { BaseEntity, PipeSpecErrorHandler } from '../entities';
+import { KaotoSchemaDefinition } from '../kaoto-schema';
 import { AddStepMode, IVisualizationNodeData } from '../visualization/base-visual-entity';
 import { PipeVisualEntity } from '../visualization/flows';
 import { FlowTemplateService } from '../visualization/flows/support/flow-templates-service';
@@ -14,6 +16,7 @@ export class PipeResource extends CamelKResource {
   protected pipe: PipeType;
   private flow?: PipeVisualEntity;
   private errorHandler?: PipeErrorHandlerEntity;
+  private errorHandlerSchema: KaotoSchemaDefinition['schema'] = {};
 
   constructor(pipe?: PipeType) {
     super(pipe);
@@ -34,6 +37,13 @@ export class PipeResource extends CamelKResource {
     this.flow = new PipeVisualEntity(this.pipe);
     this.errorHandler =
       this.pipe.spec?.errorHandler && new PipeErrorHandlerEntity(this.pipe.spec as PipeSpecErrorHandler);
+
+    const def = await DynamicCatalogRegistry.get().getEntity(CatalogKind.Entity, 'PipeErrorHandler');
+    this.errorHandlerSchema = (def?.propertiesSchema ?? {}) as KaotoSchemaDefinition['schema'];
+  }
+
+  getErrorHandlerSchema(): KaotoSchemaDefinition['schema'] {
+    return this.errorHandlerSchema;
   }
 
   removeEntity(): void {

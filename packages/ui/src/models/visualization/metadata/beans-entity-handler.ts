@@ -1,6 +1,7 @@
 import { BeanFactory, BeansDeserializer } from '@kaoto/camel-catalog/types';
 import { isDefined, resolveSchemaWithRef } from '@kaoto/forms';
 
+import { DynamicCatalogRegistry } from '../../../dynamic-catalog/dynamic-catalog-registry';
 import { CatalogKind } from '../../catalog-kind';
 import { EntityType } from '../../entities';
 import { BeansAwareResource, KaotoResource, RouteTemplateBeansAwareResource } from '../../kaoto-resource';
@@ -15,6 +16,7 @@ import { RouteTemplateBeansEntity } from './routeTemplateBeansEntity';
 export class BeansEntityHandler {
   private readonly type: 'beans' | 'routeTemplateBean' | undefined;
   private readonly beansAware: BeansAwareResource | RouteTemplateBeansAwareResource | undefined;
+  private cachedBeanSchema: KaotoSchemaDefinition['schema'] | undefined = undefined;
   constructor(private readonly camelResource?: KaotoResource) {
     if (!this.camelResource) return;
     if ((this.camelResource as unknown as BeansAwareResource).createBeansEntity !== undefined) {
@@ -26,6 +28,12 @@ export class BeansEntityHandler {
       this.beansAware = this.camelResource as unknown as RouteTemplateBeansAwareResource;
       this.type = 'routeTemplateBean';
     }
+  }
+
+  async prefetchBeanSchema(): Promise<void> {
+    if (!isDefined(this.type)) return;
+    const def = await DynamicCatalogRegistry.get().getEntity(CatalogKind.Entity, 'bean');
+    this.cachedBeanSchema = def?.propertiesSchema;
   }
 
   isSupported() {
@@ -49,12 +57,14 @@ export class BeansEntityHandler {
     if (!isDefined(this.type)) {
       return undefined;
     }
-
+    if (this.cachedBeanSchema !== undefined) {
+      return this.cachedBeanSchema;
+    }
+    // Synchronous fallback — kept for backwards compatibility until all resources prefetch
     const beansSchema = CamelCatalogService.getComponent(CatalogKind.Entity, 'bean')?.propertiesSchema;
     if (isDefined(beansSchema?.items)) {
       beansSchema.items = resolveSchemaWithRef(beansSchema.items, beansSchema.definitions ?? {});
     }
-
     return beansSchema;
   }
 

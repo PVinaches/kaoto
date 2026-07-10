@@ -570,6 +570,22 @@ describe('CamelRouteResource', () => {
   });
 
   describe('getCanvasEntityList', () => {
+    it('returns empty structure before initialize()', () => {
+      const resource = new CamelRouteResource();
+      const list = resource.getCanvasEntityList();
+      expect(list).toEqual({ common: [], groups: {} });
+    });
+
+    it('returns catalog titles after initialize()', async () => {
+      const resource = new CamelRouteResource();
+      await resource.initialize();
+      const list = resource.getCanvasEntityList();
+      // Route is in common; its catalog title should be "Route" not the raw EntityType string
+      const route = list.common.find((e) => e.name === EntityType.Route);
+      expect(route).toBeDefined();
+      expect(route!.title).not.toBe(''); // title comes from catalog, not empty fallback
+    });
+
     it('should return all entities', async () => {
       const resource = new CamelRouteResource();
       await resource.initialize();

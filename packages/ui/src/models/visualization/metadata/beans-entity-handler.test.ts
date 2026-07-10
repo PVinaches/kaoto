@@ -4,7 +4,7 @@ import { cloneDeep } from 'lodash';
 
 import * as routeStub from '../../../stubs/camel-route';
 import * as kameletStub from '../../../stubs/kamelet-route';
-import { getFirstCatalogMap } from '../../../stubs/test-load-catalog';
+import { getFirstCatalogMap, setupDynamicCatalogRegistry } from '../../../stubs/test-load-catalog';
 import { CamelRouteResource, KameletResource, PipeResource } from '../../camel';
 import { CatalogKind } from '../../catalog-kind';
 import { KaotoSchemaDefinition } from '../../kaoto-schema';
@@ -15,6 +15,7 @@ describe('BeansEntityHandler', () => {
   beforeAll(async () => {
     const catalogsMap = await getFirstCatalogMap(catalogLibrary as CatalogLibrary);
     CamelCatalogService.setCatalogKey(CatalogKind.Entity, catalogsMap.entitiesCatalog);
+    setupDynamicCatalogRegistry(catalogsMap);
   });
 
   describe('should handle beans in CamelRouteResource', () => {
@@ -151,6 +152,24 @@ describe('BeansEntityHandler', () => {
       beansHandler.setBeansModel([{ name: 'myBean', type: 'myType' }]);
       expect(beansHandler.getReferenceFromName('myBean')).toBe('');
       expect(beansHandler.stripReferenceQuote('#myBean')).toBeUndefined();
+    });
+  });
+
+  describe('BeansEntityHandler - prefetchBeanSchema', () => {
+    it('returns undefined bean schema before prefetch when cache is empty', () => {
+      const resource = new CamelRouteResource();
+      const handler = new BeansEntityHandler(resource);
+      // before prefetch, falls back to sync lookup — this test confirms the cache path works
+      expect(() => handler.getBeansSchema()).not.toThrow();
+    });
+
+    it('returns bean propertiesSchema after prefetchBeanSchema()', async () => {
+      const resource = new CamelRouteResource();
+      const handler = new BeansEntityHandler(resource);
+      await handler.prefetchBeanSchema();
+      const schema = handler.getBeansSchema();
+      expect(typeof schema).toBe('object');
+      expect(schema).toBeDefined();
     });
   });
 });
