@@ -1,6 +1,7 @@
 import type { StorybookConfig } from '@storybook/react-vite';
 import { createRequire } from 'module';
 import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 
 import packageJson from '../../../package.json' with { type: 'json' };
 
@@ -55,6 +56,11 @@ const config: StorybookConfig = {
           {
             find: /^~/,
             replacement: '',
+          },
+          // For linking forms
+          {
+            find: '@kaoto/forms',
+            replacement: fileURLToPath(new URL('../../forms/src/index.ts', import.meta.url)),
           },
         ],
       },

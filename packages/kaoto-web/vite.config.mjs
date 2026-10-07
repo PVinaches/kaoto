@@ -1,6 +1,7 @@
 // @ts-check
 import react from '@vitejs/plugin-react-swc';
 import path from 'node:path';
+import { fileURLToPath } from 'url';
 import { defineConfig } from 'vite';
 
 import packageJson from './package.json';
@@ -20,6 +21,8 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      // For linking forms
+      '@kaoto/forms': fileURLToPath(new URL('../forms/src/index.ts', import.meta.url)),
     },
   },
   css: {

@@ -6,6 +6,7 @@ import packageJson from './package.json';
 import { camelCatalogPlugin } from './scripts/camel-catalog-plugin.mjs';
 import { getCatalogFiles } from './scripts/get-catalog-files.mjs';
 import { getLastCommitInfo } from './scripts/get-last-commit-info.mjs';
+import { fileURLToPath } from 'url';
 
 // https://vitejs.dev/config/
 
@@ -41,6 +42,11 @@ export default defineConfig({
       {
         find: /^~/,
         replacement: '',
+      },
+      // For linking forms
+      { 
+        find: '@kaoto/forms', 
+        replacement: fileURLToPath(new URL('../forms/src/index.ts', import.meta.url)) 
       },
     ],
   },
