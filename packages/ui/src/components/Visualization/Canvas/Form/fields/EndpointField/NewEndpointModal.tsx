@@ -1,12 +1,6 @@
 import { Button, ComposedModal, ModalBody, ModalFooter, ModalHeader } from '@carbon/react';
-import {
-  CanvasFormTabsContext,
-  CanvasFormTabsContextResult,
-  isDefined,
-  ModelContextProvider,
-  SchemaProvider,
-} from '@kaoto/forms';
-import { FunctionComponent, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { CanvasFormTabsProvider, isDefined, ModelContextProvider, SchemaProvider } from '@kaoto/forms';
+import { FunctionComponent, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import { CatalogModalContext } from '../../../../../../dynamic-catalog/catalog-modal.provider';
@@ -32,10 +26,6 @@ export const NewEndpointModal: FunctionComponent<EndpointModalProps> = ({
   onConfirm,
   onCancel,
 }) => {
-  const formTabsValue: CanvasFormTabsContextResult = useMemo(
-    () => ({ selectedTab: 'All', setSelectedTab: () => {} }),
-    [],
-  );
   const [endpointModel, setEndpointModel] = useState<unknown>(endpoint);
   const [endpointType, setEndpointType] = useState<string | undefined>(type);
   const catalogModalContext = useContext(CatalogModalContext);
@@ -106,7 +96,8 @@ export const NewEndpointModal: FunctionComponent<EndpointModalProps> = ({
       <ModalBody>
         <ModelContextProvider model={endpointModel} onPropertyChange={onEndpointModelChange}>
           <SchemaProvider schema={endpointsSchema}>
-            <CanvasFormTabsContext.Provider value={formTabsValue}>
+            {/* The modal is rendered through a portal and must not inherit the outer canvas form tab */}
+            <CanvasFormTabsProvider tab="All">
               <EndpointFieldInner
                 mode={mode}
                 propName={ROOT_PATH}
@@ -115,7 +106,7 @@ export const NewEndpointModal: FunctionComponent<EndpointModalProps> = ({
                 setEndpointType={setEndpointType}
                 onModelChange={setEndpointModel}
               />
-            </CanvasFormTabsContext.Provider>
+            </CanvasFormTabsProvider>
           </SchemaProvider>
         </ModelContextProvider>
       </ModalBody>
