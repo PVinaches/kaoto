@@ -155,7 +155,7 @@ const selectCatalogOption = (toggleTestId: string, optionMatcher: string | RegEx
 
 const escapeRegExp = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, (char) => `\\${char}`);
 
-const exactText = (text: string) => new RegExp(`^\\s*${escapeRegExp(text)}\\s*$`);
+const exactText = (text: string) => new RegExp(String.raw`^\s*${escapeRegExp(text)}\s*$`);
 
 Cypress.Commands.add('selectIntegrationRuntime', (catalogName: string) => {
   cy.openSettings();
