@@ -1,22 +1,19 @@
-import { HelpFilled } from '@carbon/icons-react';
-import {
-  Button,
-  FormGroup,
-  FormHelperText,
-  HelperText,
-  HelperTextItem,
-  Popover,
-  TextInput,
-} from '@patternfly/react-core';
-import { type FormEvent, FunctionComponent, useCallback } from 'react';
+import './OutputVariableField.scss';
+
+import { CheckmarkFilled } from '@carbon/icons-react';
+import { TextInput } from '@carbon/react';
+import { type ChangeEvent, FunctionComponent, useCallback } from 'react';
 
 import { DataMapperStepService } from '../../services/datamapper-step.service';
+import { FieldWrapperDataMapper } from './FieldWrapperDataMapper';
 
 interface OutputVariableFieldProps {
   value: string;
   onChange: (value: string) => void;
   isDisabled?: boolean;
 }
+
+const INPUT_ID = 'output-variable-name';
 
 const getValidated = (value: string): 'default' | 'success' | 'error' => {
   if (value === '') return 'default';
@@ -32,46 +29,35 @@ const getValidated = (value: string): 'default' | 'success' | 'error' => {
  */
 export const OutputVariableField: FunctionComponent<OutputVariableFieldProps> = ({ value, onChange, isDisabled }) => {
   const error = DataMapperStepService.getOutputVariableNameError(value);
+  const isSuccess = getValidated(value) === 'success';
 
   const handleChange = useCallback(
-    (_event: FormEvent<HTMLInputElement>, newValue: string) => {
-      onChange(newValue);
+    (event: ChangeEvent<HTMLInputElement>) => {
+      onChange(event.target.value);
     },
     [onChange],
   );
 
   return (
-    <FormGroup
-      label="Save as variable"
-      labelHelp={
-        <Popover
-          bodyContent="Copy the DataMapper step output to a variable in addition to the body. When this is left empty, the DataMapper step output is delivered as a message body only."
-          triggerAction="hover"
-          withFocusTrap={false}
-        >
-          <Button variant="plain" aria-label="More info" icon={<HelpFilled />} />
-        </Popover>
-      }
-    >
-      <TextInput
-        id="output-variable-name"
-        data-testid="output-variable-name-input"
-        value={value}
-        placeholder="Variable name"
-        validated={getValidated(value)}
-        isDisabled={isDisabled}
-        onChange={handleChange}
-        aria-label="Output variable name"
-      />
-      {error && (
-        <FormHelperText>
-          <HelperText>
-            <HelperTextItem variant="error" data-testid="output-variable-name-error">
-              {error}
-            </HelperTextItem>
-          </HelperText>
-        </FormHelperText>
-      )}
-    </FormGroup>
+    <div className={`output-variable-field${isSuccess ? ' output-variable-field--success' : ''}`}>
+      <FieldWrapperDataMapper
+        label="Save as variable"
+        help="Copy the DataMapper step output to a variable in addition to the body. When this is left empty, the DataMapper step output is delivered as a message body only."
+      >
+        <TextInput
+          id={INPUT_ID}
+          data-testid="output-variable-name-input"
+          labelText="Save as variable"
+          hideLabel
+          value={value}
+          placeholder="Variable name"
+          disabled={isDisabled}
+          onChange={handleChange}
+          invalid={!!error}
+          invalidText={error ? <span data-testid="output-variable-name-error">{error}</span> : undefined}
+          decorator={isSuccess ? <CheckmarkFilled className="output-variable-field__success-icon" /> : undefined}
+        />
+      </FieldWrapperDataMapper>
+    </div>
   );
 };

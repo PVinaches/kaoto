@@ -1,0 +1,23 @@
+/* stylelint-disable selector-class-pattern -- Carbon component class names */
+// Same label row as the FieldWrapper of @kaoto/forms
+.field-wrapper-datamapper {
+  &__label-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__label {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-block: 0.5rem;
+    margin-inline: 0;
+  }
+
+  // Long unbroken tokens must wrap instead of being clipped
+  &__toggletip-content,
+  &__toggletip-content .cds--toggletip-content {
+    overflow-wrap: anywhere;
+  }
+}
